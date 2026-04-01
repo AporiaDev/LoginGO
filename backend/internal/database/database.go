@@ -28,7 +28,7 @@ func ConectarDB(cfg *config.Config) (*sql.DB , error){
 		return nil, fmt.Errorf("error al hacer ping a la base de datos: %v", err)
 	}
 
-	log.Println("Conexión establecida")
+	//log.Println("Conexión establecida")
 	return db, nil
 
 }
