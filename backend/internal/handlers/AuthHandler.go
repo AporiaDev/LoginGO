@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"log/internal/service"
+	"log/pkg/utils"
 )
 
 type AuthHandler struct{
@@ -29,9 +30,17 @@ func (h  *AuthHandler) Login(c *gin.Context){
 // 1. La Recepcionista lee el JSON
 	if err := c.ShouldBindJSON(&input); err != nil {
 		// Asume que tienes tus funciones Fail() y OK() disponibles
-		Fail(c, http.StatusBadRequest, "DATOS_INVALIDOS", "Formato incorrecto")
+		utils.Fail(c, http.StatusBadRequest, "DATOS_INVALIDOS", "Formato incorrecto")
 		return
 	}
+
+	usuarioValidado,err := h.svc.Autenticar(input.Correo,input.Password)
+	
+	if err != nil{
+		utils.Fail(c, http.StatusUnauthorized, "NO_AUTORIZADO", err.Error())
+	}
+
+	utils.OK(c, usuarioValidado)
 
 	
 

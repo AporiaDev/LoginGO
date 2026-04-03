@@ -83,7 +83,7 @@
                     alternarVista();
                 } else {
                     // Login exitoso: Mostramos el perfil con los datos que nos envió el backend
-                    mostrarPerfil(data.data.nombre, data.data.correo);
+                    mostrarPerfil(data.data.username, data.data.correo);
                 }
             } else {
                 document.getElementById('mensajeError').innerText = data.error.message;
@@ -93,10 +93,10 @@
         }
     }
 
-    function mostrarPerfil(nombre, correo) {
+    function mostrarPerfil(username, correo) {
         document.getElementById('contenedorAutenticacion').classList.add('hidden');
         document.getElementById('contenedorPerfil').classList.remove('hidden');
-        document.getElementById('perfilNombre').innerText = nombre;
+        document.getElementById('perfilNombre').innerText = username;
         document.getElementById('perfilCorreo').innerText = correo;
     }
 

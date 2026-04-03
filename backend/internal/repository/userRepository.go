@@ -19,7 +19,7 @@ func NewUserRepository(db *sql.DB) *UserRepository{
 
 func (r *UserRepository) BuscarPorCorreo(correoBuscado string) (*models.User, error){
 
-	query := `SELECT id_usuario, correo, password, nombre_completa
+	query := `SELECT id, username, password, correo
 				from users WHERE correo = $1`
 	
 	var usuario models.User
@@ -32,9 +32,10 @@ func (r *UserRepository) BuscarPorCorreo(correoBuscado string) (*models.User, er
 	err := fila.Scan(
 
 		&usuario.ID,
-		&usuario.Correo,
-		&usuario.Password,
 		&usuario.Nombre,
+		&usuario.Password,
+		&usuario.Correo,
+		
 		
 	)
 
