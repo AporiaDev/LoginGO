@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Portal de Acceso</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #2c3e50; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #2ecc71; }
+        .toggle-link { display: block; text-align: center; margin-top: 15px; color: #3498db; cursor: pointer; text-decoration: none; }
+        .toggle-link:hover { text-decoration: underline; }
+        #mensajeError { color: #e74c3c; text-align: center; margin-top: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Registro de Personal</h2>
+    
+    <input type="text" id="username" placeholder="username completo" required>
+    <input type="email" id="correo" placeholder="Correo electrónico" required>
+    <input type="password" id="password" placeholder="Contraseña" required>
+    
+    <button onclick="registrarUsuario()">Crear Cuenta</button>
+    <div id="mensajeError"></div>
+    
+    <a href="login.html" class="toggle-link">¿Ya tienes cuenta? Inicia sesión aquí</a>
+</div>
+
+<script>
+    async function registrarUsuario() {
+        const username = document.getElementById('username').value;
+        const correo = document.getElementById('correo').value;
+        const password = document.getElementById('password').value;
+        
+        // Asegúrate de que esta URL coincida con la ruta de tu API para registros
+        const url = 'http://localhost:8080/api/register'; 
+        const payload = { username, correo, password };
+
+        if(!username || !correo || !password) {
+            document.getElementById('mensajeError').innerText = "Por favor, completa todos los campos.";
+            return;
+        }
+
+        try {
+            const respuesta = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await respuesta.json();
+
+            if (data.success) {
+                alert("Registro exitoso. Serás redirigido para iniciar sesión.");
+                // Redirige automáticamente a la página de login
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('mensajeError').innerText = data.error.message || "Error al registrar la cuenta.";
+            }
+        } catch (error) {
+            document.getElementById('mensajeError').innerText = "Error de red: No se pudo conectar al servidor.";
+        }
+    }
+</script>
+
+</body>
+</html>

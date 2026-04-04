@@ -15,18 +15,20 @@ func NuevoAuthRepository (repo *repository.UserRepository) *AuthService{
 	return &AuthService{repo : repo}
 }
 
+func(s *AuthService) NuevoUsuario(username, correo, password string) error{
+
+	err := s.repo.CrearUsuario(username, correo, password)
+	return err
+
+}
+
 func (s *AuthService) Autenticar(correo, password string)(*models.User,error){
-
 	usuario, err := s.repo.BuscarPorCorreo(correo)
-
 	if err != nil{
 		return nil, errors.New("Credenciales Invalidas")
 	}
-
 	if usuario.Password != password{
 		return nil, errors.New("Credenciales invalidas")		
 	}
-
 	return usuario, nil
-
 }

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Portal de Acceso - Laboratorio</title>
+    <title>Iniciar Sesión - Portal de Acceso</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
@@ -10,29 +10,25 @@
         input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         button { width: 100%; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
         button:hover { background-color: #2980b9; }
-        .toggle-link { display: block; text-align: center; margin-top: 15px; color: #3498db; cursor: pointer; text-decoration: underline; }
+        .toggle-link { display: block; text-align: center; margin-top: 15px; color: #3498db; cursor: pointer; text-decoration: none; }
+        .toggle-link:hover { text-decoration: underline; }
         .hidden { display: none; }
         #mensajeError { color: #e74c3c; text-align: center; margin-top: 10px; font-weight: bold; }
-        /* Estilos del Perfil */
         .perfil-data { background: #ecf0f1; padding: 15px; border-radius: 4px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="card" id="contenedorAutenticacion">
-    <h2 id="tituloForm">Iniciar Sesión</h2>
+    <h2>Iniciar Sesión</h2>
     
-    <div id="formRegistro" class="hidden">
-        <input type="text" id="regNombre" placeholder="Nombre completo">
-    </div>
+    <input type="email" id="correo" placeholder="Correo electrónico" required>
+    <input type="password" id="password" placeholder="Contraseña" required>
     
-    <input type="email" id="correo" placeholder="Correo electrónico">
-    <input type="password" id="password" placeholder="Contraseña">
-    
-    <button id="btnSubmit" onclick="procesarFormulario()">Entrar al Sistema</button>
+    <button id="btnSubmit" onclick="iniciarSesion()">Entrar al Sistema</button>
     <div id="mensajeError"></div>
     
-    <span class="toggle-link" onclick="alternarVista()">¿No tienes cuenta? Regístrate aquí</span>
+    <a href="register.html" class="toggle-link">¿No tienes cuenta? Regístrate aquí</a>
 </div>
 
 <div class="card hidden" id="contenedorPerfil">
@@ -46,26 +42,11 @@
 </div>
 
 <script>
-    let esModoRegistro = false;
-
-    function alternarVista() {
-        esModoRegistro = !esModoRegistro;
-        document.getElementById('tituloForm').innerText = esModoRegistro ? 'Registro de Personal' : 'Iniciar Sesión';
-        document.getElementById('btnSubmit').innerText = esModoRegistro ? 'Crear Cuenta' : 'Entrar al Sistema';
-        document.querySelector('.toggle-link').innerText = esModoRegistro ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate aquí';
-        document.getElementById('formRegistro').classList.toggle('hidden');
-        document.getElementById('mensajeError').innerText = '';
-    }
-
-    async function procesarFormulario() {
+    async function iniciarSesion() {
         const correo = document.getElementById('correo').value;
         const password = document.getElementById('password').value;
-        const nombre = document.getElementById('regNombre').value;
-        
-        const url = esModoRegistro ? 'http://localhost:8080/api/registro' : 'http://localhost:8080/api/login';
-        
+        const url = 'http://localhost:8080/api/login';
         const payload = { correo, password };
-        if (esModoRegistro) payload.nombre = nombre;
 
         try {
             const respuesta = await fetch(url, {
@@ -74,19 +55,12 @@
                 body: JSON.stringify(payload)
             });
 
-            // Usamos tu estructura de API Envelope (Response)
             const data = await respuesta.json();
 
             if (data.success) {
-                if (esModoRegistro) {
-                    alert("Registro exitoso. Ahora puedes iniciar sesión.");
-                    alternarVista();
-                } else {
-                    // Login exitoso: Mostramos el perfil con los datos que nos envió el backend
-                    mostrarPerfil(data.data.username, data.data.correo);
-                }
+                mostrarPerfil(data.data.username, data.data.correo);
             } else {
-                document.getElementById('mensajeError').innerText = data.error.message;
+                document.getElementById('mensajeError').innerText = data.error.message || "Credenciales incorrectas.";
             }
         } catch (error) {
             document.getElementById('mensajeError').innerText = "Error de red: No se pudo conectar al servidor.";
@@ -105,6 +79,7 @@
         document.getElementById('contenedorAutenticacion').classList.remove('hidden');
         document.getElementById('correo').value = '';
         document.getElementById('password').value = '';
+        document.getElementById('mensajeError').innerText = '';
     }
 </script>
 

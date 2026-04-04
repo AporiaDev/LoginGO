@@ -50,7 +50,7 @@ func main() {
 	// Aquí está la respuesta a tu pregunta:
 	// Cuando entre una petición POST a "/api/login", Gin la dirigirá.
 	r.POST("/api/login", authHandler.Login)
-	//r.POST("/api/registro", authHandler.Registro)
+	r.POST("api/register", authHandler.Registro)
 
 	// 5. Encendemos el servidor en el puerto 8080
 	log.Println("Servidor de Laboratorio operando en el puerto 8080...")
