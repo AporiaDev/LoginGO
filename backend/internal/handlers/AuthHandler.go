@@ -68,5 +68,7 @@ func (h  *AuthHandler) Login(c *gin.Context){
 	if err != nil{
 		utils.Fail(c, http.StatusUnauthorized, "NO_AUTORIZADO", err.Error())
 	}
+	log.Printf("Datos respon: %+v\n", input)
+	log.Printf("Datos validado: %+v\n", usuarioValidado)
 	utils.OK(c, usuarioValidado)
 }
