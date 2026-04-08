@@ -14,6 +14,8 @@ import (
 	"log/internal/service"
 )
 
+var MiClave string = "5$kk7JmB56zhNbA^iCZzEc"
+
 func main() {
 	
 	cfg := config.LoadConfig()

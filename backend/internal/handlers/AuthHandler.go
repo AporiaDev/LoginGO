@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
+	
 
 	"log/internal/service"
 	"log/pkg/utils"
@@ -19,7 +20,7 @@ func NuevoAuthHandler(svc *service.AuthService)*AuthHandler{
 }
 
 //Estructura para recibir el JSON
-type LoginInput struct{
+type LoginInput struct{	
 	Correo 	 string `json:"correo" bidding:"required,email"`
 	Password string `json:"password" bidding:"required"`
 }
